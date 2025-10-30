@@ -1,0 +1,36 @@
+
+---
+
+## 🔧 How to Run
+1. Connect the **16x2 LCD** and **buttons** as per the provided schematic.
+2. Flash the compiled HEX file to your **ATmega2560** board.
+3. Power on the system — the Dino starts running automatically.
+4. Press the **jump button** to avoid obstacles and score points!
+
+---
+
+## 🧩 Future Improvements
+- Add **sound effects** using a buzzer.  
+- Display **high score memory** using EEPROM.  
+- Implement **difficulty levels** with increasing obstacle speed.  
+- Add **game-over animation** for better user experience.  
+
+---
+
+## 🏆 Acknowledgements
+Developed by **Ujjwal Kumar**  
+B.Tech in **Electronics and Communication Engineering (VLSI & Embedded Systems)**  
+**Indian Institute of Information Technology, Manipur**
+
+---
+
+## 📸 Preview
+*(You can add an image here)*  
+![LCD Dino Game Setup](images/dino_game_setup.jpg)
+
+---
+
+## 🪪 License
+This project is open-sourced under the **MIT License**.  
+Feel free to use, modify, and share it with proper attribution.
+
