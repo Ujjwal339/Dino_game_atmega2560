@@ -18,6 +18,11 @@ The score increases with time, and collisions reset the game.
 - **Low Power Consumption:** Efficient code and timing control using AVR timers.
 
 ---
+## Results
+  <img width="1263" height="1565" alt="WhatsApp Image 2026-05-23 at 21 13 32" src="https://github.com/user-attachments/assets/153272df-3f6c-42cd-a82e-d6f4a56450ef" />
+  <img width="1263" height="1563" alt="WhatsApp Image 2026-05-23 at 21 13 19" src="https://github.com/user-attachments/assets/68ae9b33-46e5-4c76-8cb4-679c079134f2" />
+
+
 
 ## ⚙️ Hardware Requirements
 | Component | Description |
