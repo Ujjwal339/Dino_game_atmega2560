@@ -1,0 +1,66 @@
+{
+  "version": 1,
+  "author": "Ujjwal Kumar",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "wokwi-atmega2560",
+      "id": "cpu",
+      "top": 120,
+      "left": 0,
+      "attrs": {
+        "frequency": "14745600"
+      }
+    },
+    {
+      "type": "wokwi-lcd1602",
+      "id": "lcd",
+      "top": 0,
+      "left": 300,
+      "attrs": {
+        "pins": "parallel"
+      }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "jumpBtn",
+      "top": 300,
+      "left": 460,
+      "attrs": {
+        "color": "green",
+        "label": "JUMP"
+      }
+    },
+    {
+      "type": "wokwi-resistor",
+      "id": "pullup",
+      "top": 260,
+      "left": 460,
+      "attrs": {
+        "value": "10000"
+      }
+    }
+  ],
+  "connections": [
+    ["cpu:GND.1",    "lcd:VSS",  "black",  []],
+    ["cpu:VCC.1",    "lcd:VDD",  "red",    []],
+    ["cpu:GND.1",    "lcd:V0",   "black",  []],
+
+    ["cpu:PC0",      "lcd:RS",   "green",  []],
+    ["cpu:PC1",      "lcd:RW",   "yellow", []],
+    ["cpu:PC2",      "lcd:E",    "orange", []],
+
+    ["cpu:PC4",      "lcd:D4",   "blue",   []],
+    ["cpu:PC5",      "lcd:D5",   "blue",   []],
+    ["cpu:PC6",      "lcd:D6",   "blue",   []],
+    ["cpu:PC7",      "lcd:D7",   "blue",   []],
+
+    ["cpu:VCC.1",    "lcd:A",    "red",    []],
+    ["cpu:GND.1",    "lcd:K",    "black",  []],
+
+    ["cpu:VCC.1",    "pullup:1", "red",    []],
+    ["pullup:2",     "jumpBtn:1.l", "purple", []],
+    ["cpu:PE7",      "jumpBtn:1.l", "purple", []],
+    ["cpu:GND.1",    "jumpBtn:2.l", "black",  []]
+  ]
+}
