@@ -1,53 +1,96 @@
-# 🦖 LCD Dino Game using AVR Microcontroller
+LCD Dino Game — ATmega2560 Bare-Metal Embedded C
 
-An interactive **Dino Game** built using an **ATmega2560** microcontroller and a **16x2 LCD display**, inspired by the classic Chrome Dino game. The game uses custom CGRAM characters for animation and real-time obstacle detection to make gameplay smooth and fun.
-
----
-
-## 🎮 Project Overview
-
-This project implements a simple yet engaging game on an embedded system platform.  
-The player controls a dinosaur that must **jump over obstacles** to survive as long as possible.  
-The score increases with time, and collisions reset the game.
-
-### 🧩 Key Features
-- **Custom LCD Graphics:** Designed unique characters for the Dino and obstacles using LCD CGRAM.
-- **Dynamic Gameplay:** Real-time obstacle spawning and collision detection.
-- **Smooth Animation:** Optimized LCD refresh logic for flicker-free display.
-- **Score System:** Continuously updating score displayed on-screen.
-- **Low Power Consumption:** Efficient code and timing control using AVR timers.
-
----
-## Results
-  <img width="1263" height="1565" alt="WhatsApp Image 2026-05-23 at 21 13 32" src="https://github.com/user-attachments/assets/153272df-3f6c-42cd-a82e-d6f4a56450ef" />
-  <img width="1263" height="1563" alt="WhatsApp Image 2026-05-23 at 21 13 19" src="https://github.com/user-attachments/assets/68ae9b33-46e5-4c76-8cb4-679c079134f2" />
+Chrome's offline Dino game, rebuilt from scratch on a 16×2 LCD using bare-metal AVR programming — no Arduino libraries, no OS, just registers.
+ATmega2560 | Embedded C | AVR-GCC | Custom CGRAM Graphics | Hardware Timers | GPIO Interrupts
 
 
+Overview
+This project implements a fully playable Dino Jump game on an ATmega2560 microcontroller driving a 16×2 character LCD — built entirely in bare-metal Embedded C without any Arduino abstraction layer.
+Every component — LCD communication, character animation, obstacle movement, collision detection, score tracking, and display refresh — is handled at the hardware register level using AVR timers and GPIO interrupts.
 
-## ⚙️ Hardware Requirements
-| Component | Description |
-|------------|--------------|
-| **Microcontroller** | ATmega2560 (tested on Fire Bird V platform) |
-| **Display** | 16x2 Character LCD |
-| **Buttons/Switches** | For jump and reset controls |
-| **Power Source** | 5V regulated power supply |
-| **Miscellaneous** | Connecting wires, Breadboard/PCB setup |
+Demo
+<img width="1263" height="1563" alt="WhatsApp Image 2026-05-23 at 21 13 19" src="https://github.com/user-attachments/assets/cc8c7a24-dcc6-48c3-81cd-44d9f3172607" />
 
----
+<img width="1263" height="1565" alt="WhatsApp Image 2026-05-23 at 21 13 32" src="https://github.com/user-attachments/assets/ad22ca84-61d8-4731-aeb2-ef5ab642b083" />
 
-## 🧠 Software & Tools Used
-- **Programming Language:** Embedded C  
-- **IDE:** Atmel Studio / Microchip Studio  
-- **Compiler:** AVR-GCC  
-- **Simulation (optional):** Proteus  
-- **Flashing Tool:** AVRDUDE  
-- **Libraries Used:** Standard AVR I/O and delay libraries  
 
----
+Features
 
-## 🕹️ Game Controls
-- **Jump Button:** Makes the Dino jump over obstacles.  
-- **Reset Button:** Restarts the game after collision.  
+Custom CGRAM Graphics — Dino and obstacle sprites designed as custom 5×8 pixel characters written directly to LCD CGRAM
+Hardware Timer-Driven Logic — Obstacle movement and game speed controlled via AVR hardware timer (no delay() blocking)
+GPIO Interrupt Jump — Button press handled through hardware interrupt for zero-latency response
+Collision Detection — Real-time position comparison between Dino and obstacle at every timer tick
+Live Score Tracking — Score increments continuously while alive, displayed on LCD row 2
+Flicker-Free Refresh — Optimized LCD write sequence avoids full-screen redraws
+Game Over & Reset — Collision triggers game-over message; reset button restarts cleanly
 
----
 
+Hardware
+ComponentDetailsMicrocontrollerATmega2560 (Fire Bird V platform)Display16×2 Character LCDJump ControlPush button (GPIO interrupt)Reset ControlPush buttonPower5V regulated
+
+
+How It Works
+Power On
+   │
+   ▼
+Initialize LCD + CGRAM (custom Dino & obstacle sprites)
+   │
+   ▼
+Start Hardware Timer (controls game tick rate)
+   │
+   ┌──────────────────────────────────────┐
+   │           GAME LOOP                  │
+   │  Timer ISR fires every N ms          │
+   │  ├── Move obstacle left 1 position   │
+   │  ├── Check collision with Dino       │
+   │  │     ├── HIT  → Game Over screen   │
+   │  │     └── MISS → Increment score    │
+   │  ├── If obstacle off-screen → reset  │
+   │  └── Refresh LCD (partial update)    │
+   │                                      │
+   │  Button ISR (GPIO interrupt)         │
+   │  └── Trigger Dino jump animation     │
+   └──────────────────────────────────────┘
+
+Project Structure
+Dino_game_atmega2560/
+├── Dino_game_c_main     ← Main source file (bare-metal Embedded C)
+├── Dino.yaml           
+├── results/
+│   ├── gameplay_1.jpe
+└── README.md
+
+Build & Flash
+Requirements
+
+AVR-GCC compiler
+AVRDUDE (for flashing)
+Atmel Studio / Microchip Studio (optional IDE)
+
+Compile
+bashavr-gcc -mmcu=atmega2560 -O2 -o dino.elf Dino_game_c_main
+avr-objcopy -O ihex dino.elf dino.hex
+Flash
+bashavrdude -c wiring -p m2560 -P /dev/ttyUSB0 -b 115200 -U flash:w:dino.hex
+Simulate (Wokwi)
+Open Dino.yaml at wokwi.com to run the simulation in browser without hardware.
+
+Technical Highlights
+
+Zero HAL dependency — Direct register manipulation (DDRB, PORTB, TCCR1B, OCR1A, EIMSK)
+ISR-based architecture — Game logic driven by TIMER1_COMPA_vect, jump by INT0_vect
+CGRAM sprite encoding — Custom 5×8 bitmaps written to LCD addresses 0x00–0x07
+Partial LCD update — Only changed positions rewritten per frame, eliminating flicker
+
+
+What I Learned
+Building this without Arduino libraries forced me to understand:
+
+How 4-bit LCD communication works at the signal level
+How AVR hardware timers generate precise periodic interrupts
+How to design game state machines in constrained memory (2KB RAM)
+How CGRAM addressing works for custom character creation
+
+
+Platform
+Tested on Fire Bird V (ATmega2560-based robotics platform), IIIT Manipur Embedded Systems Lab
