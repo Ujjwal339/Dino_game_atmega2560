@@ -94,10 +94,7 @@ Start Hardware Timer (controls game tick rate)
 ```
 Dino_game_atmega2560/
 ├── Dino_game_c_main     ← Main source file (bare-metal Embedded C)
-├── Dino.yaml            ← Wokwi simulation file
-├── results/
-│   ├── gameplay_1.jpeg
-│   └── hardware_setup.jpeg
+├── diagram.json            ← Wokwi simulation file
 └── README.md
 ```
 
