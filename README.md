@@ -14,9 +14,9 @@ Every component — LCD communication, character animation, obstacle movement, c
 ---
 
 ## Demo
-<img width="1263" height="1565" alt="WhatsApp Image 2026-05-23 at 21 13 32" src="https://github.com/user-attachments/assets/e5b522b9-83be-442b-95ec-5f1ec5ff2316" />
+<img width="1263" height="1565" alt="WhatsApp Image 2026-05-23 at 21 13 32" src="https://github.com/user-attachments/assets/c07381e9-9f2e-4a88-b361-15ad9e96acc9" />
+<img width="1263" height="1563" alt="WhatsApp Image 2026-05-23 at 21 13 19" src="https://github.com/user-attachments/assets/96f4f6d5-73d5-4004-80f5-842a34fcce52" />
 
-<img width="1263" height="1563" alt="WhatsApp Image 2026-05-23 at 21 13 19" src="https://github.com/user-attachments/assets/938c0eff-c515-4645-9b3e-2e4105c3f920" />
 
 ---
 
@@ -41,6 +41,23 @@ Every component — LCD communication, character animation, obstacle movement, c
 | Jump Control | Push button (GPIO interrupt) |
 | Reset Control | Push button |
 | Power | 5V regulated |
+
+### Pin Configuration
+
+| Signal | ATmega2560 Port | PORTC Bit |
+|---|---|---|
+| RS (Register Select) | PC0 | Bit 0 |
+| RW (Read/Write) | PC1 | Bit 1 |
+| EN (Enable) | PC2 | Bit 2 |
+| D4 (Data) | PC4 | Bit 4 |
+| D5 (Data) | PC5 | Bit 5 |
+| D6 (Data) | PC6 | Bit 6 |
+| D7 (Data) | PC7 | Bit 7 |
+| Jump Button | PE7 | Active LOW |
+
+> Full PORTC (`DDRC |= 0xFF`) used as LCD port. 4-bit mode — D0–D3 unused.  
+> Jump button is active LOW — press = LOW on PE7.  
+> On Fire Bird V, board pull-ups handle PE7. For standalone builds, add 10kΩ pull-up to VCC.
 
 ---
 
@@ -78,6 +95,9 @@ Start Hardware Timer (controls game tick rate)
 Dino_game_atmega2560/
 ├── Dino_game_c_main     ← Main source file (bare-metal Embedded C)
 ├── Dino.yaml            ← Wokwi simulation file
+├── results/
+│   ├── gameplay_1.jpeg
+│   └── hardware_setup.jpeg
 └── README.md
 ```
 
@@ -102,7 +122,12 @@ avrdude -c wiring -p m2560 -P /dev/ttyUSB0 -b 115200 -U flash:w:dino.hex
 ```
 
 ### Simulate (Wokwi)
-Open `Dino.yaml` at [wokwi.com](https://wokwi.com) to run the simulation in browser without hardware.
+1. Go to [wokwi.com](https://wokwi.com) → New Project → ATmega2560
+2. Replace `diagram.json` with the file in this repo
+3. Paste `Dino_game_c_main` as `sketch.c`
+4. Click Run — no hardware needed
+
+> Crystal frequency set to 14.7456 MHz to match `F_CPU` in the code.
 
 ---
 
